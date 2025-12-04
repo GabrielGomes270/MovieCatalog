@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MovieCatalog.Data;
+using MovieCatalog.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ Console.WriteLine(connectionString);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
