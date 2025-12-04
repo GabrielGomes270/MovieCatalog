@@ -1,0 +1,34 @@
+﻿services:
+  mysql:
+    image: mysql:8.0
+    container_name: moviecatalog-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: moviecatalogdb
+      MYSQL_USER: moviecataloguser
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"   # Porta local -> Porta do container
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  api:
+    build:
+      context: .              # diretório raiz do projeto
+      dockerfile: Dockerfile
+    container_name: moviecatalog-api
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      DB_SERVER: mysql
+      DB_NAME: moviecatalogdb
+      DB_USER: moviecataloguser
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
