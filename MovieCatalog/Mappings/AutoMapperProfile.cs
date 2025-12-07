@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MovieCatalog.DTOs.Genre;
 using MovieCatalog.DTOs.Movie;
 using MovieCatalog.Entities;
 namespace MovieCatalog.Mappings
@@ -12,6 +13,10 @@ namespace MovieCatalog.Mappings
 
             CreateMap<MovieCreateDto, Movie>();
             CreateMap<MovieUpdateDto, Movie>();
+
+            CreateMap<Genre, GenreReadDto>();
+            CreateMap<GenreCreateDto, Genre>();
+            CreateMap<GenreUpdateDto, Genre>();
         }
     }
 }
