@@ -37,6 +37,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseMiddleware<MovieCatalog.Middlewares.ErrorHandlingMiddleware>();
+
 app.MapControllers();
 
 app.Run();
