@@ -49,11 +49,12 @@ namespace MovieCatalog.Controllers
         public async Task<IActionResult> Refresh([FromQuery] string refreshToken)
         {
             var result = await _authService.RefreshTokenAsync(refreshToken);
+
             if (!result.IsAuthenticated)
             {
-                return BadRequest(result.Message);
+                return Unauthorized(result);
             }
-            return Ok(result.Message);
+            return Ok(result);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieCatalog.DTOs.Users;
 using MovieCatalog.Repositories;
 using System.Security.Claims;
 
@@ -11,10 +13,12 @@ namespace MovieCatalog.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
 
@@ -40,7 +44,9 @@ namespace MovieCatalog.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userRepository.GetAllAsync();
-            return Ok(users);
+            var response = _mapper.Map<IEnumerable<UserResponseDto>>(users);
+
+            return Ok(response);
         }
 
 
@@ -62,7 +68,7 @@ namespace MovieCatalog.Controllers
                 return NotFound("Usuário não encontrado.");
             }
 
-            return Ok(user);
+            return Ok(_mapper.Map<UserResponseDto>(user));
         }
 
         [Authorize(Roles = "Admin")]

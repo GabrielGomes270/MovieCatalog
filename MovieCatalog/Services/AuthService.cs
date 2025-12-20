@@ -82,6 +82,12 @@ public class AuthService : IAuthService
 
         var (token,expiresAt) = JwtTokenGenerator.GenerateAccessToken(user, _jwtSettings);
 
+        var refreshToken = JwtTokenGenerator.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
+
+        await _userRepository.UpdateAsync(user);
+
         return new AuthResponseDto
         {
             IsAuthenticated = true,
@@ -99,14 +105,43 @@ public class AuthService : IAuthService
         };
     }
 
-    public Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
+    public async Task<AuthResponseDto> RefreshTokenAsync(string refreshToken)
     {
-        // Podemos implementar refresh de verdade depois
-        return Task.FromResult(new AuthResponseDto
+        var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
+
+        if (user == null || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
         {
-            IsAuthenticated = false,
-            Message = "Refresh token ainda não implementado."
-        });
+            return new AuthResponseDto
+            {
+                IsAuthenticated = false,
+                Message = "Token de atualização inválido ou expirado."
+            };
+        }
+
+        var (newToken, expiresAt) = JwtTokenGenerator.GenerateAccessToken(user, _jwtSettings);
+
+        var newRefreshToken = JwtTokenGenerator.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
+
+        await _userRepository.UpdateAsync(user);
+
+        return new AuthResponseDto {
+
+            IsAuthenticated = true,
+            Message = "Token atualizado com sucesso!",
+            Username = user.Username,
+            Name = user.Name,
+            Email = user.Email,
+            Role = user.Role,
+            Tokens = new TokenResponseDto
+            {
+                AccessToken = newToken,
+                RefreshToken = newRefreshToken,
+                ExpiresAt = expiresAt
+            }
+        };
     }
 
 

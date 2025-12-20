@@ -41,6 +41,11 @@ namespace MovieCatalog.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == identifier || u.Email == identifier);
         }
 
+        public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        }
+
         public async Task AddAsync(User user)
         {
             _context.Users.Add(user);

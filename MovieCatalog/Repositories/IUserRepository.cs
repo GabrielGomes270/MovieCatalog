@@ -10,6 +10,8 @@ namespace MovieCatalog.Repositories
         Task<User?> GetByEmailAsync(string email);
         Task<User?> GetByIdentifierAsync(string identifier);
 
+        Task<User?> GetByRefreshTokenAsync(string refreshToken);
+
         Task<bool> ExistsByUsernameAsync(string username);
         Task<bool> ExistsByEmailAsync(string email);
 
