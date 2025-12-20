@@ -27,6 +27,10 @@
       DB_USER: moviecataloguser
       DB_PASSWORD: ${MYSQL_PASSWORD}
       ASPNETCORE_ENVIRONMENT: Development
+
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
     ports:
       - "8080:8080"
 

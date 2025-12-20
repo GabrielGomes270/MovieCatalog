@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalog.Data;
@@ -21,6 +22,7 @@ namespace MovieCatalog.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllMovies(
             [FromQuery] string? title, 
@@ -34,6 +36,8 @@ namespace MovieCatalog.Controllers
             return Ok(_mapper.Map<IEnumerable<MovieReadDto>>(movies));
         }
 
+
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetMovieById(int id)
         {
@@ -45,6 +49,8 @@ namespace MovieCatalog.Controllers
             return Ok(_mapper.Map<MovieReadDto>(movie));
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<MovieReadDto>> CreateMovie(MovieCreateDto movieCreateDto)
         {
@@ -55,6 +61,8 @@ namespace MovieCatalog.Controllers
             return CreatedAtAction(nameof(GetMovieById), new { id = movie.Id }, readDto);
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovie(int id, MovieUpdateDto movieUpdateDto)
         {
@@ -70,6 +78,8 @@ namespace MovieCatalog.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {

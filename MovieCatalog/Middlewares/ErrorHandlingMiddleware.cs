@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Text.Json;
 
 namespace MovieCatalog.Middlewares
@@ -21,6 +22,25 @@ namespace MovieCatalog.Middlewares
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro inesperado capturado pelo middleware global.");
+
+                if (ex is DbUpdateException dbEx &&
+                  dbEx.InnerException?.Message.Contains("Duplicate entry") == true)
+                {
+                    context.Response.StatusCode = StatusCodes.Status409Conflict;
+                    context.Response.ContentType = "application/json";
+
+                    var conflictResponse = new
+                    {
+                        message = "Já existe um registro com os dados informados.",
+                        status = StatusCodes.Status409Conflict
+                    };
+
+                    await context.Response.WriteAsync(
+                        JsonSerializer.Serialize(conflictResponse)
+                    );
+
+                    return; 
+                }
 
                 var statusCode = context.Response.StatusCode;
 

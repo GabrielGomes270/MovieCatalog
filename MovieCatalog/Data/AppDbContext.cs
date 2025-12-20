@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MovieCatalog.Entities;
 namespace MovieCatalog.Data
 {
     public class AppDbContext : DbContext
@@ -9,6 +10,7 @@ namespace MovieCatalog.Data
 
         public DbSet<Entities.Movie> Movies { get; set; }
         public DbSet<Entities.Genre> Genres { get; set; }
+        public DbSet<Entities.User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,24 @@ namespace MovieCatalog.Data
                     CoverImagePath = null
                 }
             );
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "admin",
+                    PasswordHash = "temp",
+                    Role = "Admin"
+                }
+            );
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
         }
     }
 }

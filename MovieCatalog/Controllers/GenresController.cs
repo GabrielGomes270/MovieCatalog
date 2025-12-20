@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalog.DTOs.Genre;
@@ -20,6 +21,8 @@ namespace MovieCatalog.Controllers
             _mapper = mapper;
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllGenres(
             [FromQuery] string? name,
@@ -29,6 +32,8 @@ namespace MovieCatalog.Controllers
             return Ok(_mapper.Map<IEnumerable<GenreReadDto>>(genres));
         }
 
+
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGenreById(int id)
         {
@@ -42,6 +47,8 @@ namespace MovieCatalog.Controllers
             return Ok(_mapper.Map<GenreReadDto>(genre));
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateGenre([FromBody] GenreCreateDto genreCreateDto)
         {
@@ -52,6 +59,8 @@ namespace MovieCatalog.Controllers
             return CreatedAtAction(nameof(GetGenreById), new { id = genre.Id }, genreReadDto);
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGenre(int id, [FromBody] GenreUpdateDto genreUpdateDto)
         {
@@ -68,6 +77,8 @@ namespace MovieCatalog.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenre(int id)
         {
