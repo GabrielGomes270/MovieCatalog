@@ -68,9 +68,6 @@ MovieCatalog
 │
 └── Program.cs
 
-yaml
-Copiar código
-
 ---
 
 ## 🔐 Autenticação e Autorização
@@ -85,14 +82,13 @@ A API utiliza **JWT** para autenticação e **roles** para autorização.
 - Endpoints sensíveis usam `[Authorize]`
 - Operações administrativas usam:
 
-```csharp
 [Authorize(Roles = "Admin")]
 🔑 JWT – Configuração Segura
 As configurações do JWT não são versionadas.
 
-Variáveis de ambiente necessárias
+Variáveis de ambiente necessárias:
 env
-Copiar código
+
 JwtSettings__Key=YOUR_SECRET_KEY
 JwtSettings__Issuer=MovieCatalog
 JwtSettings__Audience=MovieCatalogUsers
@@ -103,14 +99,14 @@ JwtSettings__Audience=MovieCatalogUsers
 🐳 Docker
 O projeto utiliza Docker Compose para subir o banco de dados MySQL e a API.
 
-Subir a aplicação
-bash
-Copiar código
+Subir a aplicação:
+
 docker compose up -d --build
-Derrubar containers e volumes
-bash
-Copiar código
+
+Derrubar containers e volumes:
+
 docker compose down --volumes
+
 Serviços
 API → http://localhost:8080
 
@@ -119,10 +115,10 @@ MySQL → porta 3307 (host)
 📄 Swagger
 A API possui documentação automática via Swagger.
 
-text
-Copiar código
 http://localhost:8080/swagger
-Autorização no Swagger
+
+Autorização no Swagger:
+
 Faça login
 
 Copie o AccessToken
@@ -131,8 +127,8 @@ Clique em Authorize
 
 Use:
 
-Copiar código
 Bearer {seu_token}
+
 👤 Funcionalidades Implementadas
 🎥 Filmes
 Criar, listar, atualizar e remover
@@ -173,8 +169,6 @@ Evitar vazamento de stack trace
 
 Exemplo:
 
-json
-Copiar código
 {
   "message": "Ocorreu um erro inesperado no servidor.",
   "status": 500
