@@ -1,9 +1,12 @@
-﻿# 🎬 MovieCatalog API
+## 📌 README.md 
 
-![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)
+
+# 🎬 MovieCatalog API
+
+![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-Web%20API-5C2D91)
-![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
 ![JWT](https://img.shields.io/badge/Auth-JWT-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
@@ -28,45 +31,47 @@ Projeto desenvolvido com foco em **aprendizado**, **organização**, **seguranç
 
 ## 📐 Arquitetura do Projeto
 
+```
 MovieCatalog
 │
 ├── Controllers
-│ ├── MoviesController
-│ ├── GenresController
-│ ├── UsersController
-│ └── AuthController
+│   ├── MoviesController
+│   ├── GenresController
+│   ├── UsersController
+│   └── AuthController
 │
 ├── DTOs
-│ ├── Movie
-│ ├── Genre
-│ ├── User
-│ └── Authentication
+│   ├── Movie
+│   ├── Genre
+│   ├── User
+│   └── Authentication
 │
 ├── Entities
-│ ├── Movie
-│ ├── Genre
-│ └── User
+│   ├── Movie
+│   ├── Genre
+│   └── User
 │
 ├── Repositories
-│ ├── Interfaces
-│ └── Implementations
+│   ├── Interfaces
+│   └── Implementations
 │
 ├── Services
-│ ├── AuthService
-│ └── JwtTokenGenerator
+│   ├── AuthService
+│   └── JwtTokenGenerator
 │
 ├── Configurations
-│ └── JwtSettings
+│   └── JwtSettings
 │
 ├── Validators
 │
 ├── Middlewares
-│ └── ErrorHandlingMiddleware
+│   └── ErrorHandlingMiddleware
 │
 ├── Data
-│ └── AppDbContext
+│   └── AppDbContext
 │
 └── Program.cs
+````
 
 ---
 
@@ -75,140 +80,175 @@ MovieCatalog
 A API utiliza **JWT** para autenticação e **roles** para autorização.
 
 ### Roles disponíveis
-- `Admin`
-- `User`
+
+* `Admin`
+* `User`
 
 ### Proteção de endpoints
-- Endpoints sensíveis usam `[Authorize]`
-- Operações administrativas usam:
 
+* Endpoints sensíveis usam:
+
+```csharp
+[Authorize]
+```
+
+* Operações administrativas usam:
+
+```csharp
 [Authorize(Roles = "Admin")]
-🔑 JWT – Configuração Segura
-As configurações do JWT não são versionadas.
+```
 
-Variáveis de ambiente necessárias:
-env
+---
 
+## 🔑 JWT – Configuração Segura
+
+As configurações do JWT **não são versionadas**.
+
+### Variáveis de ambiente necessárias
+
+```env
 JwtSettings__Key=YOUR_SECRET_KEY
 JwtSettings__Issuer=MovieCatalog
 JwtSettings__Audience=MovieCatalogUsers
+```
+
 ✔ A chave JWT nunca é commitada
-✔ Utiliza .env e User Secrets localmente
-✔ .env.example pode ser fornecido como referência
+✔ Utiliza `.env` e **User Secrets** localmente
+✔ `.env.example` pode ser fornecido como referência
 
-🐳 Docker
-O projeto utiliza Docker Compose para subir o banco de dados MySQL e a API.
+---
 
-Subir a aplicação:
+## 🐳 Docker
 
+O projeto utiliza **Docker Compose** para subir a API e o banco MySQL.
+
+### Subir a aplicação
+
+```bash
 docker compose up -d --build
+```
 
-Derrubar containers e volumes:
+### Derrubar containers e volumes
 
+```bash
 docker compose down --volumes
+```
 
-Serviços
-API → http://localhost:8080
+### Serviços
 
-MySQL → porta 3307 (host)
+* **API:** [http://localhost:8080](http://localhost:8080)
+* **MySQL:** porta `3307` (host)
 
-📄 Swagger
-A API possui documentação automática via Swagger.
+---
 
+## 📄 Swagger
+
+A API possui documentação automática via **Swagger**.
+
+📍 Acesse:
+
+```
 http://localhost:8080/swagger
+```
 
-Autorização no Swagger:
+### Autorização no Swagger
 
-Faça login
+1. Faça login
+2. Copie o `AccessToken`
+3. Clique em **Authorize**
+4. Use:
 
-Copie o AccessToken
-
-Clique em Authorize
-
-Use:
-
+```
 Bearer {seu_token}
+```
 
-👤 Funcionalidades Implementadas
-🎥 Filmes
-Criar, listar, atualizar e remover
+---
 
-Filtros por título, ano e gênero
+## 👤 Funcionalidades Implementadas
 
-Paginação e ordenação
+### 🎥 Filmes
 
-🏷️ Gêneros
-CRUD completo
+* Criar, listar, atualizar e remover
+* Filtros por título, ano e gênero
+* Paginação e ordenação
 
-Validação com FluentValidation
+### 🏷️ Gêneros
 
-👥 Usuários
-Registro
+* CRUD completo
+* Validação com FluentValidation
 
-Login
+### 👥 Usuários
 
-Listagem protegida por role
+* Registro
+* Login
+* Listagem protegida por role
+* Soft delete (Admin)
 
-Soft delete (Admin)
+### 🔐 Autenticação
 
-🔐 Autenticação
-Login com username ou email
+* Login com username ou email
+* JWT Access Token
+* Estrutura preparada para Refresh Token
 
-JWT Access Token
+---
 
-Estrutura preparada para Refresh Token
+## ⚠️ Middleware Global de Erros
 
-⚠️ Middleware Global de Erros
 Middleware responsável por:
 
-Capturar exceções não tratadas
+* Capturar exceções não tratadas
+* Retornar respostas JSON padronizadas
+* Evitar vazamento de stack trace
 
-Retornar respostas JSON padronizadas
+### Exemplo de resposta
 
-Evitar vazamento de stack trace
-
-Exemplo:
-
+```json
 {
   "message": "Ocorreu um erro inesperado no servidor.",
   "status": 500
 }
-🧪 Validações
-Utiliza FluentValidation para:
+```
 
-DTOs de criação e atualização
+---
 
-Mensagens claras de erro
+## 🧪 Validações
 
-Separação de responsabilidades
+Utiliza **FluentValidation** para:
 
-📌 Boas Práticas Aplicadas
-DTOs para evitar vazamento de entidades
+* DTOs de criação e atualização
+* Mensagens claras de erro
+* Separação de responsabilidades
 
-Repository Pattern
+---
 
-Separação de camadas
+## 📌 Boas Práticas Aplicadas
 
-JWT seguro
+* DTOs para evitar vazamento de entidades
+* Repository Pattern
+* Separação de camadas
+* JWT seguro
+* Variáveis sensíveis fora do código
+* Dockerização
+* Código organizado e escalável
 
-Variáveis sensíveis fora do código
+---
 
-Dockerização
+## 📚 Próximos Passos (Opcional)
 
-Código organizado e escalável
+* Persistência real de Refresh Token
+* Policy-based Authorization
+* Padronização de respostas (Envelope)
+* Testes automatizados
 
-📚 Próximos Passos (Opcional)
-Persistência real de Refresh Token
+> *Não implementados para manter a complexidade adequada ao escopo de portfólio.*
 
-Policy-based Authorization
+---
 
-Padronização de respostas (Envelope)
+## 🧑‍💻 Autor
 
-Testes automatizados
+**Gabriel Gomes**
 
-(Não implementados para manter a complexidade adequada ao escopo de portfólio)
 
-🧑‍💻 Autor
-Gabriel Gomes
-Estudante de Análise e Desenvolvimento de Sistemas
-Foco em Back-end com .NET
+Estudante de Análise e Desenvolvimento de Sistemas.
+
+Foco em **Back-end com .NET**.
