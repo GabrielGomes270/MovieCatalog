@@ -79,7 +79,7 @@ namespace MovieCatalog.Controllers
 
             if (user == null || user.IsDeleted)
             {
-                return NotFound("User not found.");
+                return NotFound("Usuário não encontrado.");
             }
             await _userRepository.SoftDeleteAsync(user);
             return NoContent();
